@@ -14,7 +14,7 @@ const AppNavigator = () => {
       <TopTab.Navigator
         screenOptions={{
           tabBarActiveTintColor: '#f76707',
-          tabBarLabelStyle: {fontSize: 16},
+          tabBarLabelStyle: {fontSize: 16, fontWeight: '600'},
           tabBarIndicatorStyle: {backgroundColor: '#f76707'},
           swipeEnabled: false,
         }}>
