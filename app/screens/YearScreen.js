@@ -2,23 +2,16 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {CalendarList} from 'react-native-calendars';
 
-const RANGE = 24;
-const initialDate = '2021-10-18';
+import date from '../api/date';
+
+const RANGE = 6;
+
+const initialDate = date;
 
 const YearScreen = () => {
-  const [selected, setSelected] = useState(initialDate);
-  const markedDates = {
-    [selected]: {
-      selected: true,
-      disableTouchEvent: true,
-      selectedColor: '#5E60CE',
-      selectedTextColor: 'white',
-    },
-  };
-
-  const onDayPress = day => {
-    setSelected(day.dateString);
-  };
+  const vacation = {key: 'vacation', color: 'red', selectedDotColor: 'blue'};
+  const massage = {key: 'massage', color: 'blue', selectedDotColor: 'blue'};
+  const workout = {key: 'workout', color: 'green'};
 
   return (
     <CalendarList
@@ -27,8 +20,15 @@ const YearScreen = () => {
       futureScrollRange={RANGE}
       renderHeader={renderCustomHeader}
       theme={theme}
-      onDayPress={onDayPress}
-      markedDates={markedDates}
+      markingType="multi-dot"
+      markedDates={{
+        '2021-10-25': {
+          dots: [vacation, massage, workout],
+          selected: true,
+          selectedColor: 'red',
+        },
+        '2021-10-26': {dots: [massage, workout], disabled: true},
+      }}
     />
   );
 };
@@ -42,11 +42,11 @@ const theme = {
   },
   'stylesheet.day.basic': {
     today: {
-      borderColor: '#48BFE3',
+      borderColor: '#5E60CE',
       borderWidth: 0.8,
     },
     todayText: {
-      color: '#5390D9',
+      color: '#5E60CE',
       fontWeight: '800',
     },
   },
@@ -58,16 +58,14 @@ function renderCustomHeader(date) {
   const textStyle = {
     fontSize: 18,
     fontWeight: 'bold',
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingVertical: 10,
     color: '#5E60CE',
-    paddingRight: 5,
   };
 
   return (
     <View style={styles.header}>
-      <Text style={[styles.month, textStyle]}>{`${month}`}</Text>
-      <Text style={[styles.year, textStyle]}>{year}</Text>
+      <Text style={textStyle}>{month}</Text>
+      <Text style={textStyle}>{year}</Text>
     </View>
   );
 }
@@ -79,13 +77,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  month: {
-    marginLeft: 5,
-  },
-  year: {
-    marginRight: 5,
+    marginVertical: 10,
+    paddingHorizontal: 5,
   },
 });
