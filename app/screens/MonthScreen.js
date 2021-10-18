@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const YearPage = () => {
+const MonthScreen = () => {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>YearPage</Text>
+      <Text>MonthScreen</Text>
     </View>
   );
 };
 
-export default YearPage;
+export default MonthScreen;

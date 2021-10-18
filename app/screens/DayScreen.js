@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const DayPage = () => {
+const DayScreen = () => {
   return (
     <View
       style={{
@@ -10,9 +10,9 @@ const DayPage = () => {
         justifyContent: 'center',
         backgroundColor: 'red',
       }}>
-      <Text>DayPage</Text>
+      <Text>DayScreen</Text>
     </View>
   );
 };
 
-export default DayPage;
+export default DayScreen;
