@@ -63,6 +63,7 @@ const MonthScreen = () => {
           current={initialDate}
           // onDayPress={() => console.log('move')} Day로 가던가 다른 것이 나와야됨
           theme={theme}
+          hideArrows={true}
           markingType="multi-dot"
           markedDates={{
             '2021-10-25': {
