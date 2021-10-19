@@ -13,6 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3A2783F6DFB73CC5BA089E61 /* libPods-calendar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86DDE15FC92EB171CB778554 /* libPods-calendar.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9A391B92271F164000EE36AE /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A391B91271F164000EE36AE /* SplashScreen.storyboard */; };
 		FA5D21FA2FBBCCA559876C7E /* libPods-calendar-calendarTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A9D35EC3A2C7AC75CBE7BFB /* libPods-calendar-calendarTests.a */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		629C43EB54528F40905BDDF7 /* Pods-calendar-calendarTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-calendar-calendarTests.debug.xcconfig"; path = "Target Support Files/Pods-calendar-calendarTests/Pods-calendar-calendarTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = calendar/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		86DDE15FC92EB171CB778554 /* libPods-calendar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-calendar.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A391B91271F164000EE36AE /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F915C31637B167F05E216103 /* Pods-calendar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-calendar.release.xcconfig"; path = "Target Support Files/Pods-calendar/Pods-calendar.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +118,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				9A391B91271F164000EE36AE /* SplashScreen.storyboard */,
 				13B07FAE1A68108700A75B9A /* calendar */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* calendarTests */,
@@ -145,7 +148,6 @@
 				629C43EB54528F40905BDDF7 /* Pods-calendar-calendarTests.debug.xcconfig */,
 				2F444411F36173D22E90FA35 /* Pods-calendar-calendarTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -244,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				9A391B92271F164000EE36AE /* SplashScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
