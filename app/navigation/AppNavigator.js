@@ -15,7 +15,7 @@ const AppNavigator = () => {
         screenOptions={{
           tabBarActiveTintColor: '#5E60CE',
           tabBarLabelStyle: {fontSize: 16, fontWeight: '600'},
-          tabBarIndicatorStyle: {backgroundColor: '#48BFE3'},
+          tabBarIndicatorStyle: {backgroundColor: '#5E60CE'},
           swipeEnabled: false,
         }}>
         <TopTab.Screen name="Day" component={DayScreen} />
