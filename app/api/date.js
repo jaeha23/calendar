@@ -1,5 +1,13 @@
 export default checkDate = () => {
-  const today = new Date();
+  const myDate = new Date();
+  const today = new Date(
+    myDate.getFullYear(),
+    myDate.getMonth(),
+    myDate.getDate(),
+    myDate.getHours() + 9,
+    myDate.getMinutes(),
+    myDate.getSeconds(),
+  );
 
   const year = today.getFullYear();
   const month = ('0' + (today.getMonth() + 1)).slice(-2);

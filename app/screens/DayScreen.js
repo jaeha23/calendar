@@ -1,19 +1,83 @@
 import React, {Component} from 'react';
-import {Alert, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Platform,
+  Button,
+} from 'react-native';
+// import DateTimePicker from '@react-native-community/datetimepicker';
+
 // @ts-expect-error
 import {Agenda} from 'react-native-calendars';
+import {LocaleConfig} from 'react-native-calendars';
 
+LocaleConfig.locales['ko'] = {
+  monthNames: [
+    '1월',
+    '2월.',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월.',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월',
+  ],
+  monthNamesShort: [
+    '1월',
+    '2월.',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월.',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월',
+  ],
+  dayNames: [
+    '일요일',
+    '월요일',
+    '화요일',
+    '수요일',
+    '목요일',
+    '금요일',
+    '토요일',
+  ],
+  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+  today: "Aujourd'hui",
+};
+LocaleConfig.defaultLocale = 'ko';
+
+import date from '../api/date';
 export default class DayScreen extends Component {
   state = {
     items: {},
   };
+
+  // const markedDates = {
+  //   [selected]: {
+  //     selected: true,
+  //     disableTouchEvent: true,
+  //     selectedColor: '#5E60CE',
+  //     selectedTextColor: 'white',
+  //   },
+  // };
 
   render() {
     return (
       <Agenda
         items={this.state.items}
         loadItemsForMonth={this.loadItems.bind(this)}
-        selected={'2021-10-18'}
+        selected={date()}
         renderItem={this.renderItem.bind(this)}
         renderEmptyDate={this.renderEmptyDate.bind(this)}
         rowHasChanged={this.rowHasChanged.bind(this)}
@@ -88,6 +152,28 @@ export default class DayScreen extends Component {
     const date = new Date(time);
     return date.toISOString().split('T')[0];
   }
+
+  // const [date, setDate] = useState(new Date(Date.now()));
+  // const [show, setShow] = useState(false);
+
+  // const onChange = (event, selectedDate) => {
+  //   console.log(selectedDate);
+  //   const currentDate = selectedDate || date;
+  //   setShow(Platform.OS === 'ios');
+  //   setDate(currentDate);
+  // };
+
+  // {show && (
+  //   <DateTimePicker
+  //     testID="dateTimePicker"
+  //     value={date}
+  //     mode="time"
+  //     is24Hour={true}
+  //     display="spinner"
+  //     onChange={onChange}
+  //   />
+  // )}
+  // <Button onPress={() => setShow(false)} title="Close time picker!" />
 }
 
 const styles = StyleSheet.create({
