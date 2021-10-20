@@ -53,10 +53,6 @@ const RANGE = 6;
 const initialDate = date();
 
 const YearScreen = () => {
-  const vacation = {key: 'vacation', color: 'red', selectedDotColor: 'blue'};
-  const massage = {key: 'massage', color: 'blue', selectedDotColor: 'blue'};
-  const workout = {key: 'workout', color: 'green'};
-
   return (
     <CalendarList
       current={initialDate}
@@ -67,9 +63,48 @@ const YearScreen = () => {
       markingType="multi-dot"
       markedDates={{
         '2021-10-25': {
-          dots: [vacation, massage, workout],
+          dots: [
+            {
+              id: 1,
+              height: 105,
+              name: '밥 먹기',
+              color: 'blue',
+              done: false,
+            },
+            {
+              id: 2,
+              height: 105,
+              name: '캘린더 만들기',
+              color: 'red',
+              done: false,
+            },
+            {
+              id: 3,
+              height: 105,
+              name: '아이스 아메리카노 마시기',
+              color: 'black',
+              done: false,
+            },
+          ],
         },
-        '2021-10-26': {dots: [massage, workout]},
+        '2021-10-26': {
+          dots: [
+            {
+              id: 1,
+              height: 105,
+              name: '밥 먹기',
+              color: 'blue',
+              done: false,
+            },
+            {
+              id: 2,
+              height: 105,
+              name: '캘린더 만들기',
+              color: 'red',
+              done: false,
+            },
+          ],
+        },
       }}
     />
   );

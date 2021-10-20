@@ -70,6 +70,52 @@ export default class DayScreen extends Component {
           rowHasChanged={this.rowHasChanged.bind(this)}
           hideKnob={true}
           monthFormat={'yyyy MMM'}
+          markingType="multi-dot"
+          markedDates={{
+            '2021-10-25': {
+              dots: [
+                {
+                  id: 1,
+                  height: 105,
+                  text: '밥 먹기',
+                  color: 'blue',
+                  done: false,
+                },
+                {
+                  id: 2,
+                  height: 105,
+                  text: '캘린더 만들기',
+                  color: 'red',
+                  done: false,
+                },
+                {
+                  id: 3,
+                  height: 105,
+                  text: '아이스 아메리카노 마시기',
+                  color: 'black',
+                  done: false,
+                },
+              ],
+            },
+            '2021-10-26': {
+              dots: [
+                {
+                  id: 1,
+                  height: 105,
+                  text: '밥 먹기',
+                  color: 'blue',
+                  done: false,
+                },
+                {
+                  id: 2,
+                  height: 105,
+                  text: '캘린더 만들기',
+                  color: 'red',
+                  done: false,
+                },
+              ],
+            },
+          }}
         />
       </>
     );

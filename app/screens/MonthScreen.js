@@ -69,10 +69,6 @@ const today = new Date(
   myDate.getSeconds(),
 );
 
-const vacation = {key: 'vacation', color: 'red', selectedDotColor: 'blue'};
-const massage = {key: 'massage', color: 'blue', selectedDotColor: 'blue'};
-const workout = {key: 'workout', color: 'green'};
-
 const MonthScreen = () => {
   const [date, setDate] = useState(new Date(Date.now()));
   const [realDate, setRealDate] = useState(today);
@@ -138,9 +134,48 @@ const MonthScreen = () => {
           markedDates={{
             ...markedDates,
             '2021-10-25': {
-              dots: [vacation, massage, workout],
+              dots: [
+                {
+                  id: 1,
+                  height: 105,
+                  text: '밥 먹기',
+                  color: 'blue',
+                  done: false,
+                },
+                {
+                  id: 2,
+                  height: 105,
+                  text: '캘린더 만들기',
+                  color: 'red',
+                  done: false,
+                },
+                {
+                  id: 3,
+                  height: 105,
+                  text: '아이스 아메리카노 마시기',
+                  color: 'black',
+                  done: false,
+                },
+              ],
             },
-            '2021-10-26': {dots: [massage, workout]},
+            '2021-10-26': {
+              dots: [
+                {
+                  id: 1,
+                  height: 105,
+                  text: '밥 먹기',
+                  color: 'blue',
+                  done: false,
+                },
+                {
+                  id: 2,
+                  height: 105,
+                  text: '캘린더 만들기',
+                  color: 'red',
+                  done: false,
+                },
+              ],
+            },
           }}
         />
       </Fragment>
