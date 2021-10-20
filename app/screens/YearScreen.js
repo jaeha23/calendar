@@ -1,111 +1,21 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {CalendarList} from 'react-native-calendars';
+import 'moment/locale/ko';
 
-import date from '../api/date';
-import {LocaleConfig} from 'react-native-calendars';
-
-LocaleConfig.locales['ko'] = {
-  monthNames: [
-    '1월',
-    '2월.',
-    '3월',
-    '4월',
-    '5월',
-    '6월',
-    '7월.',
-    '8월',
-    '9월',
-    '10월',
-    '11월',
-    '12월',
-  ],
-  monthNamesShort: [
-    '1월',
-    '2월.',
-    '3월',
-    '4월',
-    '5월',
-    '6월',
-    '7월.',
-    '8월',
-    '9월',
-    '10월',
-    '11월',
-    '12월',
-  ],
-  dayNames: [
-    '일요일',
-    '월요일',
-    '화요일',
-    '수요일',
-    '목요일',
-    '금요일',
-    '토요일',
-  ],
-  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-  today: "Aujourd'hui",
-};
-LocaleConfig.defaultLocale = 'ko';
+import {testDotsData} from '../config/data';
 
 const RANGE = 6;
-
-const initialDate = date();
 
 const YearScreen = () => {
   return (
     <CalendarList
-      current={initialDate}
       pastScrollRange={RANGE}
       futureScrollRange={RANGE}
       renderHeader={renderCustomHeader}
       theme={theme}
       markingType="multi-dot"
-      markedDates={{
-        '2021-10-25': {
-          dots: [
-            {
-              id: 1,
-              height: 105,
-              name: '밥 먹기',
-              color: 'blue',
-              done: false,
-            },
-            {
-              id: 2,
-              height: 105,
-              name: '캘린더 만들기',
-              color: 'red',
-              done: false,
-            },
-            {
-              id: 3,
-              height: 105,
-              name: '아이스 아메리카노 마시기',
-              color: 'black',
-              done: false,
-            },
-          ],
-        },
-        '2021-10-26': {
-          dots: [
-            {
-              id: 1,
-              height: 105,
-              name: '밥 먹기',
-              color: 'blue',
-              done: false,
-            },
-            {
-              id: 2,
-              height: 105,
-              name: '캘린더 만들기',
-              color: 'red',
-              done: false,
-            },
-          ],
-        },
-      }}
+      markedDates={testDotsData}
     />
   );
 };
