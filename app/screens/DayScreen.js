@@ -1,18 +1,12 @@
 import React, {Component} from 'react';
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Platform,
-  Button,
-} from 'react-native';
+import {Alert, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
 // @ts-expect-error
 import {Agenda} from 'react-native-calendars';
 import {LocaleConfig} from 'react-native-calendars';
+
+import date from '../api/date';
 
 LocaleConfig.locales['ko'] = {
   monthNames: [
@@ -57,46 +51,27 @@ LocaleConfig.locales['ko'] = {
 };
 LocaleConfig.defaultLocale = 'ko';
 
-import date from '../api/date';
+const initialDate = date();
+
 export default class DayScreen extends Component {
   state = {
     items: {},
   };
 
-  // const markedDates = {
-  //   [selected]: {
-  //     selected: true,
-  //     disableTouchEvent: true,
-  //     selectedColor: '#5E60CE',
-  //     selectedTextColor: 'white',
-  //   },
-  // };
-
   render() {
     return (
-      <Agenda
-        items={this.state.items}
-        loadItemsForMonth={this.loadItems.bind(this)}
-        selected={date()}
-        renderItem={this.renderItem.bind(this)}
-        renderEmptyDate={this.renderEmptyDate.bind(this)}
-        rowHasChanged={this.rowHasChanged.bind(this)}
-        showClosingKnob={true}
-        // markingType={'period'}
-        // markedDates={{
-        //    '2017-05-08': {textColor: '#43515c'},
-        //    '2017-05-09': {textColor: '#43515c'},
-        //    '2017-05-14': {startingDay: true, endingDay: true, color: 'blue'},
-        //    '2017-05-21': {startingDay: true, color: 'blue'},
-        //    '2017-05-22': {endingDay: true, color: 'gray'},
-        //    '2017-05-24': {startingDay: true, color: 'gray'},
-        //    '2017-05-25': {color: 'gray'},
-        //    '2017-05-26': {endingDay: true, color: 'gray'}}}
-        // monthFormat={'yyyy'}
-        // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
-        //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
-        // hideExtraDays={false}
-      />
+      <>
+        <Agenda
+          items={this.state.items}
+          loadItemsForMonth={this.loadItems.bind(this)}
+          selected={initialDate}
+          renderItem={this.renderItem.bind(this)}
+          renderEmptyDate={this.renderEmptyDate.bind(this)}
+          rowHasChanged={this.rowHasChanged.bind(this)}
+          hideKnob={true}
+          monthFormat={'yyyy MMM'}
+        />
+      </>
     );
   }
 
@@ -107,19 +82,31 @@ export default class DayScreen extends Component {
         const strTime = this.timeToString(time);
         if (!this.state.items[strTime]) {
           this.state.items[strTime] = [];
-          const numItems = Math.floor(Math.random() * 3 + 1);
-          for (let j = 0; j < numItems; j++) {
-            this.state.items[strTime].push({
-              name: 'Item for ' + strTime + ' #' + j,
-              height: Math.max(50, Math.floor(Math.random() * 150)),
-            });
-          }
         }
       }
-      const newItems = {};
+      const oldItems = {};
       Object.keys(this.state.items).forEach(key => {
-        newItems[key] = this.state.items[key];
+        oldItems[key] = this.state.items[key];
       });
+      const newItems = {
+        ...oldItems,
+        ...{
+          '2021-10-20': [],
+          '2021-10-21': [
+            {id: 1, height: 105, name: 'Item for 2021-10-21 #0'},
+            {id: 2, height: 76, name: 'Item for 2021-10-21 #1', add: true},
+          ],
+          '2021-10-22': [],
+          '2021-10-23': [
+            {id: 1, height: 80, name: 'item 2 - any js object', add: true},
+          ],
+          '2021-10-24': [],
+          '2021-10-25': [
+            {id: 1, name: 'item 3 - any js object'},
+            {id: 2, name: 'any js object', add: true},
+          ],
+        },
+      };
       this.setState({
         items: newItems,
       });
@@ -137,11 +124,7 @@ export default class DayScreen extends Component {
   }
 
   renderEmptyDate() {
-    return (
-      <View style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
-      </View>
-    );
+    return <View style={styles.emptyDate} />;
   }
 
   rowHasChanged(r1, r2) {
@@ -152,28 +135,6 @@ export default class DayScreen extends Component {
     const date = new Date(time);
     return date.toISOString().split('T')[0];
   }
-
-  // const [date, setDate] = useState(new Date(Date.now()));
-  // const [show, setShow] = useState(false);
-
-  // const onChange = (event, selectedDate) => {
-  //   console.log(selectedDate);
-  //   const currentDate = selectedDate || date;
-  //   setShow(Platform.OS === 'ios');
-  //   setDate(currentDate);
-  // };
-
-  // {show && (
-  //   <DateTimePicker
-  //     testID="dateTimePicker"
-  //     value={date}
-  //     mode="time"
-  //     is24Hour={true}
-  //     display="spinner"
-  //     onChange={onChange}
-  //   />
-  // )}
-  // <Button onPress={() => setShow(false)} title="Close time picker!" />
 }
 
 const styles = StyleSheet.create({
@@ -182,12 +143,12 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 5,
     padding: 10,
-    marginRight: 10,
-    marginTop: 17,
+    marginRight: 20,
+    marginTop: 35,
   },
   emptyDate: {
-    height: 15,
-    flex: 1,
-    paddingTop: 30,
+    height: 25,
+    marginTop: 40,
+    marginRight: 20,
   },
 });
