@@ -3,27 +3,51 @@ import {Alert, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {Agenda} from 'react-native-calendars';
 import 'moment/locale/ko';
 
-import {testDotsData, testData} from '../config/data';
+import dataStorage from '../api/storage';
 
 export default class DayScreen extends Component {
   state = {
     items: {},
+    data: {},
+    dotData: {},
+  };
+
+  componentDidMount() {
+    this.getDate();
+  }
+
+  getDate = async () => {
+    const result = await dataStorage.getToken();
+    if (result) {
+      const data = JSON.parse(result);
+      const entries = Object.entries(data);
+      entries.map(entry => {
+        let body1 = {
+          [entry[0]]: [entry[1]],
+        };
+        let body2 = {
+          [entry[0]]: {
+            dots: [entry[1]],
+          },
+        };
+        this.setState({data: {...this.state.data, ...body1}});
+        this.setState({dotData: {...this.state.dotData, ...body2}});
+      });
+    }
   };
 
   render() {
     return (
-      <>
-        <Agenda
-          items={this.state.items}
-          loadItemsForMonth={this.loadItems.bind(this)}
-          renderItem={this.renderItem.bind(this)}
-          renderEmptyDate={this.renderEmptyDate.bind(this)}
-          rowHasChanged={this.rowHasChanged.bind(this)}
-          showClosingKnob={true}
-          markingType="multi-dot"
-          markedDates={testDotsData}
-        />
-      </>
+      <Agenda
+        items={this.state.items}
+        loadItemsForMonth={this.loadItems.bind(this)}
+        renderItem={this.renderItem.bind(this)}
+        renderEmptyDate={this.renderEmptyDate.bind(this)}
+        rowHasChanged={this.rowHasChanged.bind(this)}
+        showClosingKnob={true}
+        markingType="multi-dot"
+        markedDates={this.state.dotData}
+      />
     );
   }
 
@@ -42,7 +66,7 @@ export default class DayScreen extends Component {
       });
       const newItems = {
         ...oldItems,
-        ...testData,
+        ...this.state.data,
       };
       this.setState({
         items: newItems,

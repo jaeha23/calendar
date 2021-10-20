@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -7,83 +7,52 @@ import {
   Text,
   Pressable,
   TextInput,
+  Alert,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import 'moment/locale/ko';
+import moment from 'moment';
 
-import date from '../api/date';
-import {LocaleConfig} from 'react-native-calendars';
-
-LocaleConfig.locales['ko'] = {
-  monthNames: [
-    '1월',
-    '2월.',
-    '3월',
-    '4월',
-    '5월',
-    '6월',
-    '7월.',
-    '8월',
-    '9월',
-    '10월',
-    '11월',
-    '12월',
-  ],
-  monthNamesShort: [
-    '1월',
-    '2월.',
-    '3월',
-    '4월',
-    '5월',
-    '6월',
-    '7월.',
-    '8월',
-    '9월',
-    '10월',
-    '11월',
-    '12월',
-  ],
-  dayNames: [
-    '일요일',
-    '월요일',
-    '화요일',
-    '수요일',
-    '목요일',
-    '금요일',
-    '토요일',
-  ],
-  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-  today: "Aujourd'hui",
-};
-LocaleConfig.defaultLocale = 'ko';
-
-const initialDate = date();
-
-const myDate = new Date();
-const today = new Date(
-  myDate.getFullYear(),
-  myDate.getMonth(),
-  myDate.getDate(),
-  myDate.getHours() + 9,
-  myDate.getMinutes(),
-  myDate.getSeconds(),
-);
+import dataStorage from '../api/storage';
 
 const MonthScreen = () => {
-  const [date, setDate] = useState(new Date(Date.now()));
-  const [realDate, setRealDate] = useState(today);
-  const [text, onChangeText] = useState('');
+  const [date, setDate] = useState(moment().format());
+  const [realDate, setRealDate] = useState(moment().format());
+  const [text, setText] = useState('');
   const [mode, setMode] = useState('date');
-  const [selected, setSelected] = useState(initialDate);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const markedDates = {
-    [selected]: {
-      selected: true,
-      disableTouchEvent: true,
-      selectedColor: '#5E60CE',
-      selectedTextColor: 'white',
-    },
+  const [data, setData] = useState({});
+  const [dotData, setDotData] = useState({});
+
+  // useEffect(() => {
+  //   cleanToken();
+  // }, []);
+
+  // const cleanToken = async () => {
+  //   await dataStorage.removeToken();
+  // };
+
+  useEffect(() => {
+    getDate();
+  }, []);
+
+  const getDate = async () => {
+    const result = await dataStorage.getToken();
+    if (result) {
+      const data = JSON.parse(result);
+      setData(data);
+      const entries = Object.entries(data);
+      entries.map(entry => {
+        let body = {
+          [entry[0]]: {
+            dots: [entry[1]],
+          },
+        };
+        setDotData(data => ({...data, ...body}));
+      });
+    }
   };
 
   const onChange = (event, selectedDate) => {
@@ -99,15 +68,25 @@ const MonthScreen = () => {
       selectedDate.getMinutes(),
       selectedDate.getSeconds(),
     );
+    setRealDate(selectedRealDate);
+  };
 
-    console.log(selectedRealDate);
-    const year = selectedRealDate.getFullYear();
-    const month = ('0' + (selectedRealDate.getMonth() + 1)).slice(-2);
-    const day = ('0' + selectedRealDate.getDate()).slice(-2);
-
-    const dateString = year + '-' + month + '-' + day;
-
-    setSelected(dateString);
+  const onSave = async () => {
+    let body = {
+      [realDate.toISOString().split('T')[0]]: {
+        text: text,
+        color: 'black',
+        done: false,
+        time: realDate,
+      },
+    };
+    await dataStorage.storeToken({...data, ...body});
+    setData({});
+    setText('');
+    setDate(moment().format());
+    setRealDate(moment().format());
+    getDate();
+    Alert.alert('저장되었습니다');
   };
 
   const showMode = currentMode => {
@@ -115,68 +94,14 @@ const MonthScreen = () => {
     setMode(currentMode);
   };
 
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
-
-  const renderCalendarWithMultiDotMarking = () => {
+  const CalendarBox = () => {
     return (
       <Fragment>
         <Calendar
           style={styles.calendar}
-          current={initialDate}
           theme={theme}
           markingType="multi-dot"
-          markedDates={{
-            ...markedDates,
-            '2021-10-25': {
-              dots: [
-                {
-                  id: 1,
-                  height: 105,
-                  text: '밥 먹기',
-                  color: 'blue',
-                  done: false,
-                },
-                {
-                  id: 2,
-                  height: 105,
-                  text: '캘린더 만들기',
-                  color: 'red',
-                  done: false,
-                },
-                {
-                  id: 3,
-                  height: 105,
-                  text: '아이스 아메리카노 마시기',
-                  color: 'black',
-                  done: false,
-                },
-              ],
-            },
-            '2021-10-26': {
-              dots: [
-                {
-                  id: 1,
-                  height: 105,
-                  text: '밥 먹기',
-                  color: 'blue',
-                  done: false,
-                },
-                {
-                  id: 2,
-                  height: 105,
-                  text: '캘린더 만들기',
-                  color: 'red',
-                  done: false,
-                },
-              ],
-            },
-          }}
+          markedDates={dotData}
         />
       </Fragment>
     );
@@ -203,11 +128,11 @@ const MonthScreen = () => {
 
   return (
     <>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Fragment>{renderCalendarWithMultiDotMarking()}</Fragment>
+      <ScrollView>
+        <CalendarBox />
         <TextInput
           style={styles.input}
-          onChangeText={onChangeText}
+          onChangeText={e => setText(e)}
           value={text}
         />
         <View
@@ -217,7 +142,7 @@ const MonthScreen = () => {
             justifyContent: 'space-around',
           }}>
           <Pressable
-            onPress={showDatepicker}
+            onPress={() => showMode('date')}
             style={{
               backgroundColor: '#ced4da',
               paddingVertical: 10,
@@ -234,7 +159,7 @@ const MonthScreen = () => {
             </Text>
           </Pressable>
           <Pressable
-            onPress={showTimepicker}
+            onPress={() => showMode('time')}
             style={{
               backgroundColor: '#ced4da',
               paddingVertical: 10,
@@ -251,7 +176,7 @@ const MonthScreen = () => {
             </Text>
           </Pressable>
           <Pressable
-            onPress={showTimepicker}
+            onPress={onSave}
             style={{
               backgroundColor: '#ff6b6b',
               paddingVertical: 10,

@@ -1,13 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {CalendarList} from 'react-native-calendars';
 import 'moment/locale/ko';
 
-import {testDotsData} from '../config/data';
+import dataStorage from '../api/storage';
 
 const RANGE = 6;
 
 const YearScreen = () => {
+  const [dotData, setDotData] = useState({});
+
+  useEffect(() => {
+    getDate();
+  }, []);
+
+  const getDate = async () => {
+    const result = await dataStorage.getToken();
+    if (result) {
+      const data = JSON.parse(result);
+      const entries = Object.entries(data);
+      entries.map(entry => {
+        let body = {
+          [entry[0]]: {
+            dots: [entry[1]],
+          },
+        };
+        setDotData(data => ({...data, ...body}));
+      });
+    }
+  };
   return (
     <CalendarList
       pastScrollRange={RANGE}
@@ -15,7 +36,7 @@ const YearScreen = () => {
       renderHeader={renderCustomHeader}
       theme={theme}
       markingType="multi-dot"
-      markedDates={testDotsData}
+      markedDates={dotData}
     />
   );
 };
