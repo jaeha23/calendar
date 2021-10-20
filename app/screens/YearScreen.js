@@ -68,10 +68,8 @@ const YearScreen = () => {
       markedDates={{
         '2021-10-25': {
           dots: [vacation, massage, workout],
-          selected: true,
-          selectedColor: 'red',
         },
-        '2021-10-26': {dots: [massage, workout], disabled: true},
+        '2021-10-26': {dots: [massage, workout]},
       }}
     />
   );
