@@ -45,7 +45,7 @@ const YearScreen = () => {
           position: 'absolute',
           bottom: 0,
           backgroundColor: '#364fc7',
-          paddingVertical: 15,
+          paddingVertical: 10,
         }}
         onPress={() => {
           setDotData({});
