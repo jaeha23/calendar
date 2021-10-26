@@ -8,6 +8,7 @@ import {
   Pressable,
   TextInput,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -241,6 +242,20 @@ const MonthScreen = () => {
           </View>
         </View>
       </Modal>
+      <TouchableOpacity
+        style={{
+          width: '100%',
+          position: 'absolute',
+          bottom: 0,
+          backgroundColor: '#364fc7',
+          paddingVertical: 15,
+        }}
+        onPress={() => {
+          setDotData({});
+          getDate();
+        }}>
+        <Text style={styles.textStyle}>새로고침</Text>
+      </TouchableOpacity>
     </>
   );
 };
@@ -292,6 +307,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+    fontSize: 16,
   },
   input: {
     height: 40,

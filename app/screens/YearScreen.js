@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {CalendarList} from 'react-native-calendars';
 import 'moment/locale/ko';
 
@@ -30,14 +30,30 @@ const YearScreen = () => {
     }
   };
   return (
-    <CalendarList
-      pastScrollRange={RANGE}
-      futureScrollRange={RANGE}
-      renderHeader={renderCustomHeader}
-      theme={theme}
-      markingType="multi-dot"
-      markedDates={dotData}
-    />
+    <>
+      <CalendarList
+        pastScrollRange={RANGE}
+        futureScrollRange={RANGE}
+        renderHeader={renderCustomHeader}
+        theme={theme}
+        markingType="multi-dot"
+        markedDates={dotData}
+      />
+      <TouchableOpacity
+        style={{
+          width: '100%',
+          position: 'absolute',
+          bottom: 0,
+          backgroundColor: '#364fc7',
+          paddingVertical: 15,
+        }}
+        onPress={() => {
+          setDotData({});
+          getDate();
+        }}>
+        <Text style={styles.textStyle}>새로고침</Text>
+      </TouchableOpacity>
+    </>
   );
 };
 
@@ -87,5 +103,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 10,
     paddingHorizontal: 5,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 16,
   },
 });
