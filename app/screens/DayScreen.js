@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Alert, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, Button, Alert} from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import {Agenda} from 'react-native-calendars';
 import 'moment/locale/ko';
 
@@ -10,6 +11,9 @@ export default class DayScreen extends Component {
     items: {},
     data: {},
     dotData: {},
+    toggleCheckBox: false,
+    originalData: {},
+    day: {},
   };
 
   componentDidMount() {
@@ -20,6 +24,7 @@ export default class DayScreen extends Component {
     const result = await dataStorage.getToken();
     if (result) {
       const data = JSON.parse(result);
+      this.setState({originalData: data});
       const entries = Object.entries(data);
       entries.map(entry => {
         let body1 = {
@@ -27,7 +32,7 @@ export default class DayScreen extends Component {
         };
         let body2 = {
           [entry[0]]: {
-            dots: [entry[1]],
+            dots: entry[1],
           },
         };
         this.setState({data: {...this.state.data, ...body1}});
@@ -53,6 +58,7 @@ export default class DayScreen extends Component {
 
   loadItems(day) {
     setTimeout(() => {
+      this.setState({day: day});
       for (let i = -15; i < 85; i++) {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
         const strTime = this.timeToString(time);
@@ -75,12 +81,67 @@ export default class DayScreen extends Component {
   }
 
   renderItem(item) {
+    const format = date => {
+      const splited = date.split('T')[1].split('.')[0];
+      return splited;
+    };
+
+    const onPress = async v => {
+      const changedData = this.state.originalData;
+      const keys = Object.keys(changedData);
+      keys.map((key, i) => {
+        const datas = changedData[key];
+        const index = datas.indexOf(v);
+        if (index >= 0) datas.splice(index, 1);
+        if (datas.length === 0) return delete changedData[key];
+      });
+      await dataStorage.storeToken(changedData);
+      this.getDate();
+      this.setState({items: {}});
+      this.setState({dotData: {}});
+      this.loadItems(this.state.day);
+    };
+
+    const onValueChange = async v => {
+      const changedData = this.state.originalData;
+      const keys = Object.keys(changedData);
+      keys.map((key, i) => {
+        const datas = changedData[key];
+        datas.map((data, i) => {
+          if (data === v) return (data.done = !data.done);
+        });
+      });
+      await dataStorage.storeToken(changedData);
+      this.getDate();
+    };
+
     return (
-      <TouchableOpacity
-        style={[styles.item, {height: 50}, {color: item.color}]}
-        onPress={() => Alert.alert(item.text)}>
-        <Text>{item.text}</Text>
-      </TouchableOpacity>
+      <>
+        {item.map((v, i) => (
+          <View key={i} style={[styles.item, {height: 70}]}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <CheckBox
+                disabled={false}
+                value={v.done}
+                onValueChange={() => onValueChange(v)}
+              />
+              <View style={{marginLeft: 20}}>
+                <Text style={{fontSize: 16, color: 'grey'}}>
+                  {format(v.time)}
+                </Text>
+                <Text style={{fontSize: 16, marginTop: 15, fontWeight: 'bold'}}>
+                  {v.text}
+                </Text>
+              </View>
+            </View>
+            <Button title="삭제" onPress={() => onPress(v)} />
+          </View>
+        ))}
+      </>
     );
   }
 
@@ -106,6 +167,9 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 20,
     marginTop: 35,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   emptyDate: {
     height: 25,
