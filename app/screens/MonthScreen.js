@@ -93,6 +93,7 @@ const MonthScreen = () => {
     } else {
       await dataStorage.storeToken({...data, ...body});
     }
+    Notifications.schduleNotification(text, date);
     setData({});
     setText('');
     setDate(new Date());
