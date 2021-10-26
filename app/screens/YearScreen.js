@@ -22,7 +22,7 @@ const YearScreen = () => {
       entries.map(entry => {
         let body = {
           [entry[0]]: {
-            dots: [entry[1]],
+            dots: entry[1],
           },
         };
         setDotData(data => ({...data, ...body}));
