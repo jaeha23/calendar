@@ -28,6 +28,14 @@ static void InitializeFlipper(UIApplication *application) {
 
 @implementation AppDelegate
 
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+   [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+ }
+
+-(void)applicationDidEnterBackground:(UIApplication *)application{
+   [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+ }
+
 
 // Required for the register event.
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
