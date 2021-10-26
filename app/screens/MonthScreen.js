@@ -19,7 +19,7 @@ import dataStorage from '../api/storage';
 import Notifications from '../../Notifications';
 
 const MonthScreen = () => {
-  const [date, setDate] = useState(moment().format());
+  const [date, setDate] = useState(new Date());
   const [realDate, setRealDate] = useState(moment().format());
   const [text, setText] = useState('');
   const [mode, setMode] = useState('date');
@@ -95,10 +95,9 @@ const MonthScreen = () => {
     }
     setData({});
     setText('');
-    setDate(moment().format());
+    setDate(new Date());
     setRealDate(moment().format());
     getDate();
-    // Notifications.schduleNotification(new Date(Date.now() + 5 * 1000));
     Alert.alert('저장되었습니다');
   };
 
@@ -207,48 +206,60 @@ const MonthScreen = () => {
           </Pressable>
         </View>
       </ScrollView>
-      <Modal animationType="slide" transparent={true} visible={modalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={{width: '100%'}}>
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="spinner"
-                locale="ko-KR"
-                onChange={onChange}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '100%',
-              }}>
-              <Pressable
-                style={[styles.button, styles.buttonCancel]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>닫기</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonOk]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>확인</Text>
-              </Pressable>
+      {Platform.OS === 'android' && modalVisible ? (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display="spinner"
+          locale="ko-KR"
+          onChange={onChange}
+        />
+      ) : (
+        <Modal animationType="slide" transparent={true} visible={modalVisible}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={{width: '100%'}}>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  locale="ko-KR"
+                  onChange={onChange}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  width: '100%',
+                }}>
+                <Pressable
+                  style={[styles.button, styles.buttonCancel]}
+                  onPress={() => setModalVisible(!modalVisible)}>
+                  <Text style={styles.textStyle}>닫기</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonOk]}
+                  onPress={() => setModalVisible(!modalVisible)}>
+                  <Text style={styles.textStyle}>확인</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
       <TouchableOpacity
         style={{
           width: '100%',
           position: 'absolute',
           bottom: 0,
           backgroundColor: '#364fc7',
-          paddingVertical: 15,
+          paddingVertical: 10,
         }}
         onPress={() => {
           setDotData({});
