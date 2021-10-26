@@ -25,6 +25,10 @@ static void InitializeFlipper(UIApplication *application) {
 }
 #endif
 
+
+@implementation AppDelegate
+
+
 // Required for the register event.
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
@@ -48,8 +52,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 {
   [RNCPushNotificationIOS didReceiveNotificationResponse:response];
 }
-
-@implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
