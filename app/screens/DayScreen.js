@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Button, Alert} from 'react-native';
+import {StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {Agenda} from 'react-native-calendars';
 import 'moment/locale/ko';
@@ -14,6 +14,7 @@ export default class DayScreen extends Component {
     toggleCheckBox: false,
     originalData: {},
     day: {},
+    openCalendar: false,
   };
 
   componentDidMount() {
@@ -43,16 +44,39 @@ export default class DayScreen extends Component {
 
   render() {
     return (
-      <Agenda
-        items={this.state.items}
-        loadItemsForMonth={this.loadItems.bind(this)}
-        renderItem={this.renderItem.bind(this)}
-        renderEmptyDate={this.renderEmptyDate.bind(this)}
-        rowHasChanged={this.rowHasChanged.bind(this)}
-        showClosingKnob={true}
-        markingType="multi-dot"
-        markedDates={this.state.dotData}
-      />
+      <>
+        <Agenda
+          items={this.state.items}
+          loadItemsForMonth={this.loadItems.bind(this)}
+          renderItem={this.renderItem.bind(this)}
+          renderEmptyDate={this.renderEmptyDate.bind(this)}
+          rowHasChanged={this.rowHasChanged.bind(this)}
+          showClosingKnob={true}
+          markingType="multi-dot"
+          markedDates={this.state.dotData}
+          onCalendarToggled={calendarOpened => {
+            this.setState({openCalendar: calendarOpened});
+          }}
+        />
+        {!this.state.openCalendar && (
+          <TouchableOpacity
+            style={{
+              width: '100%',
+              position: 'absolute',
+              bottom: 0,
+              backgroundColor: '#364fc7',
+              paddingVertical: 10,
+            }}
+            onPress={() => {
+              this.getDate();
+              this.setState({items: {}});
+              this.setState({dotData: {}});
+              this.loadItems(this.state.day);
+            }}>
+            <Text style={styles.textStyle}>새로고침</Text>
+          </TouchableOpacity>
+        )}
+      </>
     );
   }
 
@@ -113,6 +137,9 @@ export default class DayScreen extends Component {
       });
       await dataStorage.storeToken(changedData);
       this.getDate();
+      this.setState({items: {}});
+      this.setState({dotData: {}});
+      this.loadItems(this.state.day);
     };
 
     return (
@@ -175,5 +202,11 @@ const styles = StyleSheet.create({
     height: 25,
     marginTop: 40,
     marginRight: 20,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 16,
   },
 });
