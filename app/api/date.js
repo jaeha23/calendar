@@ -1,4 +1,4 @@
-export default checkDate = () => {
+export const checkDate = () => {
   const myDate = new Date();
   const today = new Date(
     myDate.getFullYear(),
