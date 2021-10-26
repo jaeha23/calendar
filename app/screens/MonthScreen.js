@@ -15,6 +15,7 @@ import 'moment/locale/ko';
 import moment from 'moment';
 
 import dataStorage from '../api/storage';
+import Notifications from '../../Notifications';
 
 const MonthScreen = () => {
   const [date, setDate] = useState(moment().format());
@@ -47,7 +48,7 @@ const MonthScreen = () => {
       entries.map(entry => {
         let body = {
           [entry[0]]: {
-            dots: [entry[1]],
+            dots: entry[1],
           },
         };
         setDotData(data => ({...data, ...body}));
@@ -72,20 +73,31 @@ const MonthScreen = () => {
   };
 
   const onSave = async () => {
+    const newDate = realDate.toISOString().split('T')[0];
     let body = {
-      [realDate.toISOString().split('T')[0]]: {
-        text: text,
-        color: 'black',
-        done: false,
-        time: realDate,
-      },
+      [newDate]: [
+        {
+          text: text,
+          color: 'black',
+          done: false,
+          time: realDate,
+        },
+      ],
     };
-    await dataStorage.storeToken({...data, ...body});
+    if (data && data[newDate]) {
+      await dataStorage.storeToken({
+        ...data,
+        [newDate]: [...data[newDate], ...body[newDate]],
+      });
+    } else {
+      await dataStorage.storeToken({...data, ...body});
+    }
     setData({});
     setText('');
     setDate(moment().format());
     setRealDate(moment().format());
     getDate();
+    // Notifications.schduleNotification(new Date(Date.now() + 5 * 1000));
     Alert.alert('저장되었습니다');
   };
 
