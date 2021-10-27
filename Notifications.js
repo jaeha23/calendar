@@ -40,7 +40,7 @@ class Notifications {
   schduleNotification(message, date) {
     PushNotification.localNotificationSchedule({
       channelId: 'reminders',
-      title: 'calendar',
+      title: '알림',
       message,
       date,
     });
