@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {Agenda} from 'react-native-calendars';
+import PushNotification from 'react-native-push-notification';
 import 'moment/locale/ko';
 
 import dataStorage from '../api/storage';
+import Notifications from '../../Notifications';
 
 export default class DayScreen extends Component {
   state = {
@@ -111,6 +113,14 @@ export default class DayScreen extends Component {
     };
 
     const onPress = async v => {
+      PushNotification.getScheduledLocalNotifications(rn => {
+        rn.map(data => {
+          if (v.text === data.message) {
+            PushNotification.cancelLocalNotification(data.id);
+          }
+        });
+      });
+
       const changedData = this.state.originalData;
       const keys = Object.keys(changedData);
       keys.map((key, i) => {
